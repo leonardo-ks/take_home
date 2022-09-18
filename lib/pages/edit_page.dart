@@ -1,17 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:take_home/controllers/edit_controller.dart';
-import 'package:take_home/controllers/product_controller.dart';
-import 'package:take_home/models/product_model.dart';
+import "package:flutter/material.dart";
+import "package:get/get.dart";
+import "package:take_home/controllers/edit_controller.dart";
+import "package:take_home/controllers/product_controller.dart";
+import "package:take_home/data/models/product_model.dart";
 
 class EditPage extends StatelessWidget {
   final editController = Get.find<EditController>();
   final productController = Get.find<ProductController>();
-  final String id = Get.arguments;
+  final int id = Get.arguments;
 
   @override
   Widget build(BuildContext context) {
-    final ProductModel product = productController.productById(id);
+    final Product product = productController.productById(id);
     editController.titleController.text = product.title.toString();
     editController.priceController.text = product.price.toString();
     editController.descriptionController.text = product.description.toString();
@@ -19,7 +19,7 @@ class EditPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Product'),
+        title: const Text("Edit Product"),
       ),
       body: SafeArea(
         child: Padding(

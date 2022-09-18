@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:take_home/controllers/add_controller.dart';
-import 'package:take_home/controllers/product_controller.dart';
+import "package:flutter/material.dart";
+import "package:get/get.dart";
+import "package:take_home/controllers/add_controller.dart";
+import "package:take_home/controllers/product_controller.dart";
 
 class AddPage extends StatelessWidget {
   final addController = Get.find<AddController>();
@@ -10,7 +10,7 @@ class AddPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Product'),
+        title: const Text("Add Product"),
       ),
       body: SafeArea(
         child: Padding(

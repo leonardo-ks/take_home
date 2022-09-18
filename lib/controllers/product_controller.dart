@@ -1,9 +1,32 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:take_home/models/product_model.dart';
+import "package:flutter/material.dart";
+import "package:get/get.dart";
+import "package:intl/intl.dart";
+import "package:take_home/data/models/product_model.dart";
+import "package:take_home/data/remote/remote_data_source.dart";
 
 class ProductController extends GetxController {
-  var products = List<ProductModel>.empty().obs;
+  var products = List<Product>.empty().obs;
+  bool isLoadingData = true;
+
+  @override
+  void onInit() {
+    super.onInit();
+    getRemoteData();
+  }
+
+  void getRemoteData() {
+    RemoteDataSource().getAllRemoteProducts().then(
+          (value) => {
+            products.addAll(
+              List<Product>.from(
+                value.body.map(
+                  (e) => Product.fromJson(e),
+                ),
+              ),
+            ),
+          },
+        );
+  }
 
   void errorSnackBar(String message) {
     Get.snackbar(
@@ -14,29 +37,35 @@ class ProductController extends GetxController {
   }
 
   void add(String title, double price, String description, String category) {
-    if (title != '' && description != '' && category != '') {
-      products.add(
-        ProductModel(
-          id: DateTime.now().toString(),
-          title: title,
-          price: price,
-          description: description,
-          category: category,
+    if (title != "" && description != "" && category != "") {
+      int id = int.tryParse(
+        DateFormat("yyyyMMddhhmmss").format(
+          DateTime.now(),
         ),
+      )!;
+      Product product = Product(
+        id,
+        title,
+        price,
+        description,
+        category,
+        null,
+        null,
       );
+      products.add(product);
       Get.back();
     } else {
       errorSnackBar("All data must be filled");
     }
   }
 
-  ProductModel productById(String id) {
+  Product productById(int id) {
     return products.firstWhere((element) => element.id == id);
   }
 
-  void edit(String id, String title, double price, String description,
-      String category) {
-    if (title != '' && description != '' && category != '') {
+  void edit(
+      int id, String title, double price, String description, String category) {
+    if (title != "" && description != "" && category != "") {
       final product = productById(id);
       product.title = title;
       product.price = price;
@@ -49,19 +78,19 @@ class ProductController extends GetxController {
     }
   }
 
-  Future<bool> delete(String id) async {
+  Future<bool> delete(int id) async {
     bool deleted = false;
     await Get.defaultDialog(
-      title: 'Delete',
-      middleText: 'Are you sure you want to delete this product?',
-      textConfirm: 'Yes',
+      title: "Delete",
+      middleText: "Are you sure you want to delete this product?",
+      textConfirm: "Yes",
       confirmTextColor: Colors.white,
       onConfirm: () {
         products.removeWhere((element) => element.id == id);
         deleted = true;
         Get.back();
       },
-      textCancel: 'No',
+      textCancel: "No",
     );
     return deleted;
   }
