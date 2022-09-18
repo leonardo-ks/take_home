@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:take_home/controllers/add_controller.dart';
+import 'package:take_home/controllers/edit_controller.dart';
 import 'package:take_home/controllers/product_controller.dart';
+import 'package:take_home/models/product_model.dart';
 
-class AddPage extends StatelessWidget {
-  final addController = Get.find<AddController>();
+class EditPage extends StatelessWidget {
+  final editController = Get.find<EditController>();
   final productController = Get.find<ProductController>();
+  final String id = Get.arguments;
+
   @override
   Widget build(BuildContext context) {
+    final ProductModel product = productController.productById(id);
+    editController.titleController.text = product.title.toString();
+    editController.priceController.text = product.price.toString();
+    editController.descriptionController.text = product.description.toString();
+    editController.categoryController.text = product.category.toString();
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Product'),
+        title: const Text('Edit Product'),
       ),
       body: SafeArea(
         child: Padding(
@@ -18,7 +27,7 @@ class AddPage extends StatelessWidget {
           child: ListView(
             children: [
               TextField(
-                controller: addController.titleController,
+                controller: editController.titleController,
                 textInputAction: TextInputAction.next,
                 autocorrect: false,
                 decoration: const InputDecoration(
@@ -28,7 +37,7 @@ class AddPage extends StatelessWidget {
               ),
               const SizedBox(height: 15),
               TextField(
-                controller: addController.priceController,
+                controller: editController.priceController,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
                 autocorrect: false,
@@ -39,7 +48,7 @@ class AddPage extends StatelessWidget {
               ),
               const SizedBox(height: 15),
               TextField(
-                controller: addController.descriptionController,
+                controller: editController.descriptionController,
                 textInputAction: TextInputAction.done,
                 autocorrect: false,
                 decoration: const InputDecoration(
@@ -49,7 +58,7 @@ class AddPage extends StatelessWidget {
               ),
               const SizedBox(height: 15),
               TextField(
-                controller: addController.categoryController,
+                controller: editController.categoryController,
                 textInputAction: TextInputAction.done,
                 autocorrect: false,
                 decoration: const InputDecoration(
@@ -59,13 +68,14 @@ class AddPage extends StatelessWidget {
               ),
               const SizedBox(height: 30),
               ElevatedButton(
-                onPressed: () => productController.add(
-                  addController.titleController.text,
-                  double.tryParse(addController.priceController.text) ?? 0.0,
-                  addController.descriptionController.text,
-                  addController.categoryController.text,
+                onPressed: () => productController.edit(
+                  id,
+                  editController.titleController.text,
+                  double.tryParse(editController.priceController.text) ?? 0.0,
+                  editController.descriptionController.text,
+                  editController.categoryController.text,
                 ),
-                child: const Text("Add Product"),
+                child: const Text("Update Product"),
               ),
             ],
           ),

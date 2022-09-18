@@ -1,21 +1,21 @@
-class DataModel {
-  int id;
-  String title;
-  double price;
-  String description;
-  String category;
-  String image;
-  Rating rating;
+class ProductModel {
+  String id;
+  String? title;
+  double? price;
+  String? description;
+  String? category;
+  String? image;
+  Rating? rating;
 
-  DataModel(
-    this.id,
+  ProductModel({
+    required this.id,
     this.title,
     this.price,
     this.description,
     this.category,
     this.image,
     this.rating,
-  );
+  });
 }
 
 class Rating {
